@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Sphagnum.Common\Sphagnum.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Cluster\" />
+  </ItemGroup>
+
 </Project>

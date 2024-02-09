@@ -7,7 +7,7 @@ namespace Sphagnum.Common.UnitTests
     public class MessageParserTests
     {
         [Test]
-        public void PackUnpackIncomingMessage_WithRoutingKeyAndPayload()
+        public void PackUnpackIncomingMessage_WithPayload()
         {
             var count = 0;
             while (count < 100)
@@ -22,6 +22,21 @@ namespace Sphagnum.Common.UnitTests
         }
 
         [Test]
+        public void PackUnpackIncomingMessage_WithEmptyPayload()
+        {
+            var count = 0;
+            while (count < 100)
+            {
+                var message = MessagesGenerator.GetRandoIncommingMessage(true);
+                var bytes = MessageParser.PackMessage(message);
+                var message2 = MessageParser.UnpackIncomingMessage(bytes);
+                Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
+                Assert.IsTrue((MessageFlags)BitConverter.ToUInt16(bytes.AsSpan(1,2)) == MessageFlags.HasPayload);
+                count++;
+            }
+        }
+
+        [Test]
         public void PackUnpackOutgoingMessageGetMessageId_WithRoutingKeyAndPayload()
         {
             var count = 0;
@@ -29,9 +44,9 @@ namespace Sphagnum.Common.UnitTests
             {
                 var id = Guid.NewGuid();
                 var message = MessagesGenerator.GetRandomOutgoingMessage();
-                var bytesForProps = MessageParser.PackMessage(message);
-                var props = (MessageProperties)BitConverter.ToUInt16(bytesForProps.AsSpan(0, 2));
-                var bytes = MessageParser.Pack(message, id, props, bytesForProps.Length);
+                var bytesForFlags = MessageParser.PackMessage(message);
+                var flags = (MessageFlags)BitConverter.ToUInt16(bytesForFlags.AsSpan(1, 2));
+                var bytes = MessageParser.Pack(message, id, flags, bytesForFlags.Length);
 
                 var message2 = MessageParser.UnpackOutgoingMessage(bytes);
                 Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
@@ -49,9 +64,9 @@ namespace Sphagnum.Common.UnitTests
             {
                 var id = Guid.NewGuid();
                 var message = MessagesGenerator.GetRandomOutgoingMessage(true, true);
-                var bytesForProps = MessageParser.PackMessage(message);
-                var props = (MessageProperties)BitConverter.ToUInt16(bytesForProps.AsSpan(0, 2));
-                var bytes = MessageParser.Pack(message, id, props, bytesForProps.Length);
+                var bytesForFlags = MessageParser.PackMessage(message);
+                var flags = (MessageFlags)BitConverter.ToUInt16(bytesForFlags.AsSpan(1, 2));
+                var bytes = MessageParser.Pack(message, id, flags, bytesForFlags.Length);
 
                 var message2 = MessageParser.UnpackOutgoingMessage(bytes);
                 Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);

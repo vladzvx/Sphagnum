@@ -3,7 +3,7 @@
 namespace Sphagnum.Common.Models
 {
     [Flags]
-    internal enum MessageProperties : ushort
+    internal enum MessageFlags : ushort
     {
         None = 0,
         HasRoutingKey = 1,

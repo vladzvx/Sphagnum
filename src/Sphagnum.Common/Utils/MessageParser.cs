@@ -8,19 +8,24 @@ using System.Text;
 namespace Sphagnum.Common.Utils
 {
     /// <summary>
-    /// Порядок хранения:
-    /// 1. MessageProperties, 2 байта
-    /// 2. Id сообщения, если есть, 16 байт
-    /// 3. ExchangeNameLength, если есть, 1 байт
-    /// 4. ExchangeName, если есть, ExchangeNameLength байт, Utf8
-    /// 5. RoutingKey, если есть, 3 байта
-    /// 6. PayloadSize, если есть - 4 байта
-    /// 7. Payload, если есть, PayloadSize байт
+    /// Порядок передачи:
+    /// 1. MessageType, 1 байт
+    /// 2. MessageFlags, 2 байта
+    /// 3. Id сообщения, если есть, 16 байт
+    /// 4. ExchangeNameLength, если есть, 1 байт
+    /// 5. ExchangeName, если есть, ExchangeNameLength байт, Utf8
+    /// 6. RoutingKey, если есть, 3 байта
+    /// 7. PayloadSize, если есть - 4 байта
+    /// 8. Payload, если есть, PayloadSize байт
     /// </summary>
     internal static class MessageParser
     {
         public static OutgoingMessage UnpackOutgoingMessage(byte[] bytes)
         {
+            if ((MessageType)bytes[0] != MessageType.Common)
+            {
+                throw new ArgumentException("Uncorrect message type! 1 (MessageType.Common) expected!");
+            }
             var exchangeName = GetExchangeName(bytes);
             var routingKey = GetRoutingKey(bytes);
             var payload = GetPayload(bytes);
@@ -29,6 +34,10 @@ namespace Sphagnum.Common.Utils
 
         public static IncommingMessage UnpackIncomingMessage(byte[] bytes)
         {
+            if ((MessageType)bytes[0] != MessageType.Common)
+            {
+                throw new ArgumentException("Uncorrect message type! 1 (MessageType.Common) expected!");
+            }
             var id = GetMessageId(bytes);
             var payload = GetPayload(bytes);
             return new IncommingMessage(id, payload);
@@ -45,50 +54,51 @@ namespace Sphagnum.Common.Utils
                 throw new ArgumentException("Exchange name in UTF8 encoding must allocate < 256 bytes!");
             }
 
-            var props = MessageProperties.HasExchange;
-            int count = 18;
+            var flags = MessageFlags.HasExchange;
+            int count = 19;
             if (message.Payload.Length > 0)
             {
-                props |= MessageProperties.HasPayload;
+                flags |= MessageFlags.HasPayload;
                 count += message.Payload.Length;
                 count += 4;
             }
             if (!message.RoutingKey.IsEmpry)
             {
-                props |= MessageProperties.HasRoutingKey;
+                flags |= MessageFlags.HasRoutingKey;
                 count += 3;
             }
 
             var exchangeNameBytes = Encoding.UTF8.GetBytes(message.Exchange);// todo перевести на более оптимальный метод, не аллоцирующий лишнего.
             count += exchangeNameBytes.Length;
             count++;
-            return Pack(message, Guid.NewGuid(), props, count);
+            return Pack(message, Guid.NewGuid(), flags, count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Guid GetMessageId(Span<byte> bytes)
         {
-            var slice = bytes.Slice(2, 16);
+            var slice = bytes.Slice(3, 16);
             return new Guid(slice);
         }
 
-        internal static byte[] Pack(OutgoingMessage message, Guid id, MessageProperties props, int count)
+        internal static byte[] Pack(OutgoingMessage message, Guid id, MessageFlags flags, int count)
         {
             var result = new byte[count];
-            var shift = 0;
-            BitConverter.TryWriteBytes(result.AsSpan(shift), (ushort)props);//1. props
+            result[0] = (byte)MessageType.Common;
+            var shift = 1;
+            BitConverter.TryWriteBytes(result.AsSpan(shift), (ushort)flags);//2. flags
             shift += 2;
-            id.TryWriteBytes(result.AsSpan(shift));//2. id
+            id.TryWriteBytes(result.AsSpan(shift));//3. id
             shift += 16;
-            if ((props & MessageProperties.HasExchange) == MessageProperties.HasExchange)
+            if ((flags & MessageFlags.HasExchange) == MessageFlags.HasExchange)
             {
                 var exchangeBytes = Encoding.UTF8.GetBytes(message.Exchange);
-                BitConverter.TryWriteBytes(result.AsSpan(shift), (byte)(message.Exchange.Length));//3. ExchangeNameLength
+                BitConverter.TryWriteBytes(result.AsSpan(shift), (byte)(message.Exchange.Length));//4. ExchangeNameLength
                 shift += 1;
-                exchangeBytes.CopyTo(result.AsSpan(shift));//4. ExchangeName
+                exchangeBytes.CopyTo(result.AsSpan(shift));//5. ExchangeName
                 shift += exchangeBytes.Length;
             }
-            if ((props & MessageProperties.HasRoutingKey) == MessageProperties.HasRoutingKey)//5. RoutingKey
+            if ((flags & MessageFlags.HasRoutingKey) == MessageFlags.HasRoutingKey)//6. RoutingKey
             {
                 result[shift] = message.RoutingKey.Part1;
                 shift++;
@@ -97,42 +107,46 @@ namespace Sphagnum.Common.Utils
                 result[shift] = message.RoutingKey.Part3;
                 shift++;
             }
-            if ((props & MessageProperties.HasPayload) == MessageProperties.HasPayload)
+            if ((flags & MessageFlags.HasPayload) == MessageFlags.HasPayload)
             {
-                BitConverter.TryWriteBytes(result.AsSpan(shift), message.Payload.Length);//6. PayloadSize
+                BitConverter.TryWriteBytes(result.AsSpan(shift), message.Payload.Length);//7. PayloadSize
                 shift += 4;
-                message.Payload.CopyTo(result.AsMemory(shift));//7. Payload
+                message.Payload.CopyTo(result.AsMemory(shift));//8. Payload
             }
             return result;
         }
 
         internal static byte[] PackMessage(IncommingMessage message)
         {
-            var result = new byte[18 + message.Payload.Length + 4];
-            var props = MessageProperties.HasPayload;
-            BitConverter.TryWriteBytes(result.AsSpan(), (ushort)props);
-            message.MessageId.TryWriteBytes(result.AsSpan(2));
-            BitConverter.TryWriteBytes(result.AsSpan(18), message.Payload.Length);
-            message.Payload.CopyTo(result.AsMemory(22));
+            var result = new byte[19 + message.Payload.Length + 4];
+            result[0] = (byte)MessageType.Common;
+            var flags = MessageFlags.HasPayload;
+            BitConverter.TryWriteBytes(result.AsSpan(1,2), (ushort)flags);
+            message.MessageId.TryWriteBytes(result.AsSpan(3));
+            BitConverter.TryWriteBytes(result.AsSpan(19), message.Payload.Length);
+            message.Payload.CopyTo(result.AsMemory(23));
             return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool HasKey(Span<byte> bytes)
         {
-            return (((MessageProperties)bytes[0] & MessageProperties.HasRoutingKey) == MessageProperties.HasRoutingKey);
+            var value = BitConverter.ToUInt16(bytes.Slice(1, 2));
+            return (((MessageFlags)value & MessageFlags.HasRoutingKey) == MessageFlags.HasRoutingKey);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool HasPayload(Span<byte> bytes)
         {
-            return (((MessageProperties)bytes[0] & MessageProperties.HasPayload) == MessageProperties.HasPayload);
+            var value = BitConverter.ToUInt16(bytes.Slice(1, 2));
+            return (((MessageFlags)value & MessageFlags.HasPayload) == MessageFlags.HasPayload);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool HasExchange(Span<byte> bytes)
         {
-            return (((MessageProperties)bytes[0] & MessageProperties.HasExchange) == MessageProperties.HasExchange);
+            var value = BitConverter.ToUInt16(bytes.Slice(1, 2));
+            return (((MessageFlags)value & MessageFlags.HasExchange) == MessageFlags.HasExchange);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -143,17 +157,17 @@ namespace Sphagnum.Common.Utils
             {
                 throw new ArgumentException("bytes must contains exchange name!");
             }
-            return Encoding.UTF8.GetString(bytes.Slice(19, bytes[18]));
+            return Encoding.UTF8.GetString(bytes.Slice(20, bytes[19]));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static RoutingKey GetRoutingKey(Span<byte> bytes)
         {
-            var length = bytes[18];
+            var length = bytes[19];
             RoutingKey key;
             if (HasKey(bytes))
             {
-                var routingKeyShift = 18 + length + 1;
+                var routingKeyShift = 19 + length + 1;
 
                 var routingKeyPart1 = bytes[routingKeyShift];
                 var routingKeyPart2 = bytes[routingKeyShift + 1];
@@ -173,10 +187,10 @@ namespace Sphagnum.Common.Utils
             var result = Array.Empty<byte>();
             if (HasPayload(bytes))
             {
-                var shift = 18;
+                var shift = 19;
                 if (HasExchange(bytes))//todo проверить бенчмарком, как работает инлайн
                 {
-                    shift += bytes[18];
+                    shift += bytes[19];
                     shift++;
                 }
                 if (HasKey(bytes))
@@ -187,7 +201,7 @@ namespace Sphagnum.Common.Utils
                 var payloadSize = BitConverter.ToInt32(bytes[shift..]);
                 if (payloadSize > 0)
                 {
-                    result = bytes.Slice(shift+4, payloadSize).ToArray();
+                    result = bytes.Slice(shift + 4, payloadSize).ToArray();
                 }
             }
             return result;

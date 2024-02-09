@@ -3,7 +3,7 @@ using System;
 
 namespace Sphagnum.Abstractions.Messaging.Models
 {
-    public readonly struct OutgoingMessage
+    public readonly ref struct OutgoingMessage
     {
         public readonly string Exchange;
 
@@ -13,9 +13,16 @@ namespace Sphagnum.Abstractions.Messaging.Models
 
         public OutgoingMessage(string exchange, RoutingKey routingKey, ReadOnlyMemory<byte> payload)
         {
-            this.Exchange = exchange;
-            this.RoutingKey = routingKey;
-            this.Payload = payload;
+            Exchange = exchange;
+            RoutingKey = routingKey;
+            Payload = payload;
+        }
+
+        public OutgoingMessage(string exchange, ReadOnlyMemory<byte> payload)
+        {
+            Exchange = exchange;
+            RoutingKey = new RoutingKey();
+            Payload = payload;
         }
     }
 }
