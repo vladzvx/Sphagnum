@@ -1,20 +1,36 @@
 using Microsoft.AspNetCore.Mvc;
-using Sphagnum.Abstractions;
-using System.Text;
+using Sphagnum.Common.Contracts.Messaging;
+using Sphagnum.Common.Contracts.Messaging.Messages;
 
 namespace Sphagnum.DebugClient.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TestController(ISphagnumClient connection) : ControllerBase
+    public class TestController : ControllerBase
     {
-        private readonly ISphagnumClient _connection = connection;
+        private readonly IMessagingClient _connection;
+        private static Task? rec;
+
+        public TestController(IMessagingClient connection)
+        {
+            _connection = connection;
+        }
+
 
         [HttpGet]
-        public async Task Send(string text)
+        public async Task Send(int size)
         {
-            var payload = Encoding.UTF8.GetBytes(text);
-            await _connection.Publish(new Abstractions.Messaging.Models.OutgoingMessage("test", payload));
+            var payload1 = new byte[size];
+            var payload2 = new byte[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                payload1[i] = 1;
+                payload2[i] = 2;
+            }
+            var t1 = _connection.Publish(new OutgoingMessage("test", payload1)).AsTask();
+            var t2 = _connection.Publish(new OutgoingMessage("test", payload2)).AsTask();
+            await Task.WhenAll(t1, t2);
         }
     }
 }

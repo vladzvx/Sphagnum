@@ -1,6 +1,6 @@
-using Sphagnum.Common.Models;
 using Sphagnum.Common.UnitTests.DataGenerators;
 using Sphagnum.Common.Utils;
+using Sphagnum.Common.Utils.Models;
 
 namespace Sphagnum.Common.UnitTests
 {
@@ -16,7 +16,7 @@ namespace Sphagnum.Common.UnitTests
                 var bytes = MessageParser.PackMessage(message);
                 var message2 = MessageParser.UnpackIncomingMessage(bytes);
                 Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
-                
+
                 count++;
             }
         }
@@ -31,7 +31,7 @@ namespace Sphagnum.Common.UnitTests
                 var bytes = MessageParser.PackMessage(message);
                 var message2 = MessageParser.UnpackIncomingMessage(bytes);
                 Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
-                Assert.IsTrue((MessageFlags)BitConverter.ToUInt16(bytes.AsSpan(1,2)) == MessageFlags.HasPayload);
+                Assert.IsTrue((MessageFlags)BitConverter.ToUInt16(bytes.AsSpan(5, 2)) == MessageFlags.HasPayload);
                 count++;
             }
         }
@@ -45,7 +45,7 @@ namespace Sphagnum.Common.UnitTests
                 var id = Guid.NewGuid();
                 var message = MessagesGenerator.GetRandomOutgoingMessage();
                 var bytesForFlags = MessageParser.PackMessage(message);
-                var flags = (MessageFlags)BitConverter.ToUInt16(bytesForFlags.AsSpan(1, 2));
+                var flags = (MessageFlags)BitConverter.ToUInt16(bytesForFlags.AsSpan(5, 2));
                 var bytes = MessageParser.Pack(message, id, flags, bytesForFlags.Length);
 
                 var message2 = MessageParser.UnpackOutgoingMessage(bytes);
@@ -65,7 +65,7 @@ namespace Sphagnum.Common.UnitTests
                 var id = Guid.NewGuid();
                 var message = MessagesGenerator.GetRandomOutgoingMessage(true, true);
                 var bytesForFlags = MessageParser.PackMessage(message);
-                var flags = (MessageFlags)BitConverter.ToUInt16(bytesForFlags.AsSpan(1, 2));
+                var flags = (MessageFlags)BitConverter.ToUInt16(bytesForFlags.AsSpan(5, 2));
                 var bytes = MessageParser.Pack(message, id, flags, bytesForFlags.Length);
 
                 var message2 = MessageParser.UnpackOutgoingMessage(bytes);

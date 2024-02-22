@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sphagnum.Common\Sphagnum.Common.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cluster\" />
+    <ProjectReference Include="..\Sphagnum.Common\Sphagnum.Common.csproj" />
   </ItemGroup>
 
 </Project>

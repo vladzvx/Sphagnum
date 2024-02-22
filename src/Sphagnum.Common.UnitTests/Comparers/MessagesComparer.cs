@@ -1,9 +1,4 @@
-﻿using Sphagnum.Abstractions.Messaging.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sphagnum.Common.Contracts.Messaging.Messages;
 
 namespace Sphagnum.Common.UnitTests.Comparers
 {
@@ -12,11 +7,11 @@ namespace Sphagnum.Common.UnitTests.Comparers
         public static bool Compare(OutgoingMessage message1, OutgoingMessage message2)
         {
             var res = true;
-            res &=message1.Exchange == message2.Exchange;
+            res &= message1.Exchange == message2.Exchange;
             res &= message1.RoutingKey.Part1 == message2.RoutingKey.Part1;
             res &= message1.RoutingKey.Part2 == message2.RoutingKey.Part2;
             res &= message1.RoutingKey.Part3 == message2.RoutingKey.Part3;
-            res &=message1.Payload.Length == message2.Payload.Length;
+            res &= message1.Payload.Length == message2.Payload.Length;
             res &= ComparePayloads(message1, message2);
             return res;
         }
@@ -33,7 +28,7 @@ namespace Sphagnum.Common.UnitTests.Comparers
         {
             var payload1 = message1.Payload.ToArray();
             var payload2 = message2.Payload.ToArray();
-            return ComparePayloads(payload1,payload2);
+            return ComparePayloads(payload1, payload2);
         }
 
         public static bool ComparePayloads(byte[] payload1, byte[] payload2)
