@@ -14,17 +14,12 @@ namespace Sphagnum.Server
 
         public BrokerHost(ConnectionFactory connectionFactory)
         {
-            _broker = new BrokerDefaultBase(
-                connectionFactory,
-                new MessagesStorageDefault(),
-                new DistributorDefault(),
-                new DataProcessorDefault()
-                );
+            _broker = BrokerDefaultBase.Create(connectionFactory);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            return _broker.StartAsync();
+            return _broker.StartAsync(8081);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

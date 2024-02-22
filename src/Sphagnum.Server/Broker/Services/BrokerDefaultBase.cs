@@ -8,6 +8,9 @@ using Sphagnum.Server.Storage.Messages.Contracts;
 using Sphagnum.Server.Cluster.Contracts;
 using Sphagnum.Server.DataProcessing.Contracts;
 using Sphagnum.Common;
+using Sphagnum.Server.Cluster.Services;
+using Sphagnum.Server.DataProcessing.Services;
+using Sphagnum.Server.Storage.Messages.Services;
 
 namespace Sphagnum.Server.Broker.Services
 {
@@ -22,9 +25,9 @@ namespace Sphagnum.Server.Broker.Services
         private readonly IDistributor _distributor = distributor;
         private readonly IDataProcessor _dataProcessor = dataProcessor;
 
-        public Task StartAsync()
+        public Task StartAsync(int port)
         {
-            _connection.Bind(8081);
+            _connection.Bind(port);
             _connection.Listen(1000);
             _acceptationTask = AcceptationWorker(_cts.Token);
             return Task.CompletedTask;
@@ -35,6 +38,17 @@ namespace Sphagnum.Server.Broker.Services
             _cts.Cancel();
             return Task.CompletedTask;
         }
+
+        internal static BrokerDefaultBase Create(ConnectionFactory connectionFactory)
+        {
+            return new BrokerDefaultBase(
+                connectionFactory,
+                new MessagesStorageDefault(),
+                new DistributorDefault(),
+                new DataProcessorDefault()
+                );
+        }
+
 
         private async Task AcceptationWorker(CancellationToken token)
         {
