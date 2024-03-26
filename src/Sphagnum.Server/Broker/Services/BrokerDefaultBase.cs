@@ -1,5 +1,5 @@
-﻿using Sphagnum.Common.Contracts.Infrastructure;
-using Sphagnum.Common.Contracts.Login;
+﻿using Sphagnum.Common.Contracts.Login;
+using Sphagnum.Common.Services;
 using Sphagnum.Server.Cluster.Contracts;
 using Sphagnum.Server.Cluster.Services;
 using Sphagnum.Server.DataProcessing.Contracts;
@@ -13,7 +13,7 @@ namespace Sphagnum.Server.Broker.Services
 {
     internal class BrokerDefaultBase(ConnectionFactory connectionFactory, IMessagesStorage messagesStorage, IDistributor distributor, IDataProcessor dataProcessor)
     {
-        private readonly IConnection _connection;
+        private readonly SphagnumConnection _connection;
         private readonly CancellationTokenSource _cts = new();
         private Task? _acceptationTask;
 

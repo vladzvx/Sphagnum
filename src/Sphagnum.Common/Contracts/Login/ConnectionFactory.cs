@@ -1,7 +1,6 @@
-﻿using Sphagnum.Common.Contracts.Infrastructure;
-using Sphagnum.Common.Services;
-using Sphagnum.Common.Utils;
+﻿using Sphagnum.Common.Services;
 using System;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace Sphagnum.Common.Contracts.Login
@@ -14,16 +13,16 @@ namespace Sphagnum.Common.Contracts.Login
         public string Password { get; set; } = string.Empty;
         public UserRights UserRights { get; set; }
 
-        internal virtual async Task<IConnection> CreateDefaultConnected(Func<Func<byte[], Task>> messagesProcessorFactory)
+        internal virtual async Task<SphagnumConnection> CreateDefaultConnected(Func<Func<byte[], Task>> messagesProcessorFactory)
         {
-            var conn = new SocketConnection(messagesProcessorFactory);
+            var conn = new SphagnumConnection(() => new SocketConnection(new Socket(SocketType.Stream, ProtocolType.Tcp)), messagesProcessorFactory);
             await conn.ConnectAsync(Hostname, Port);
             return conn;
         }
 
-        internal virtual IConnection CreateDefault(Func<Func<byte[], Task>> messagesProcessorFactoryessor)
+        internal virtual SphagnumConnection CreateDefault(Func<Func<byte[], Task>> messagesProcessorFactory)
         {
-            return new SocketConnection(messagesProcessorFactoryessor);
+            return new SphagnumConnection(() => new SocketConnection(new Socket(SocketType.Stream, ProtocolType.Tcp)), messagesProcessorFactory);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Sphagnum.Common.Contracts.Infrastructure;
-using Sphagnum.Common.Contracts.Login;
+﻿using Sphagnum.Common.Contracts.Login;
 using Sphagnum.Common.Contracts.Messaging;
 using Sphagnum.Common.Contracts.Messaging.Messages;
+using Sphagnum.Common.Services;
 using Sphagnum.Common.Utils;
 using System;
 using System.Threading;
@@ -12,7 +12,7 @@ namespace Sphagnum.Client
 {
     public class ClientDefault : IMessagingClient, IDisposable
     {
-        private readonly IConnection _connection;
+        private readonly SphagnumConnection _connection;
         private readonly ConnectionFactory _connectionFactory;
         private readonly Channel<byte[]> _commonMessagesChannel = Channel.CreateUnbounded<byte[]>();
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();

@@ -1,12 +1,13 @@
 ﻿using Sphagnum.Common.Contracts.Infrastructure;
-using System.Threading.Channels;
+using System.Collections.Concurrent;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Sphagnum.Common.UnitTests.Services
 {
     internal class TestConnection : IConnection
     {
-        private readonly Channel<byte[]> _channel = Channel.CreateUnbounded<byte[]>();
-        public int BufferSize = Constants.PayloadRecieverBufferSize;
+        private readonly ConcurrentQueue<byte[]> _queue = new();
         public bool Connected => true;
 
         public IConnection Accept()
@@ -19,9 +20,8 @@ namespace Sphagnum.Common.UnitTests.Services
             return Task.FromResult<IConnection>(new TestConnection());
         }
 
-        public void Bind(int port)
+        public void Bind(EndPoint endPoint)
         {
-
         }
 
         public void Close()
@@ -44,15 +44,39 @@ namespace Sphagnum.Common.UnitTests.Services
 
         }
 
-        public ValueTask<byte[]> ReceiveAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<int> ReceiveAsync(Memory<byte> buffer, SocketFlags socketFlags, CancellationToken cancellationToken = default)
         {
-            return _channel.Reader.ReadAsync(cancellationToken);
+            var res = new byte[buffer.Length];
+            await Receive(res, socketFlags, cancellationToken);
+            res.CopyTo(buffer);
+            return res.Length;
         }
 
-        public async ValueTask<int> SendAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
+        public ValueTask<int> SendAsync(ReadOnlyMemory<byte> buffer, SocketFlags socketFlags, CancellationToken cancellationToken = default)
         {
-            await _channel.Writer.WriteAsync(data.ToArray(), cancellationToken);
-            return data.Length;
+            _queue.Enqueue(buffer.Span.ToArray());
+            return ValueTask.FromResult(buffer.Length);
+        }
+
+        private async ValueTask<int> Receive(byte[] buffer, SocketFlags socketFlags, CancellationToken cancellationToken = default, int counter = 0)
+        {
+            if (counter > 200)
+            {
+                throw new TimeoutException();
+            }
+
+            if (socketFlags == SocketFlags.Peek ? _queue.TryPeek(out byte[]? result) : _queue.TryDequeue(out result))
+            {
+                result.CopyTo(buffer, 0);
+                return result.Length;
+            }
+            else
+            {
+                await Task.Delay(100, cancellationToken);
+                counter++;
+                await Receive(buffer, socketFlags, cancellationToken, counter);
+            }
+            throw new TimeoutException();
         }
     }
 }
