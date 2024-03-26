@@ -9,9 +9,10 @@
         AuthSuccessFailed = 3,
 
         Common = 4,
-        MessageAccepted = 5,
         Ack = 6,
         Nack = 7,
         Reject = 8,
+
+        MessageAccepted = 5,
     }
 }

@@ -13,9 +13,9 @@ namespace Sphagnum.Common.Contracts.Messaging.Messages
         {
             MessageId = Guid.NewGuid();
             var data = new byte[Constants.HashedUserDataSizeInfBytes + Constants.HashedUserDataSizeInfBytes + 2];
-            HashCalculator.Calc(login).CopyTo(data,0);
+            HashCalculator.Calc(login).CopyTo(data, 0);
             HashCalculator.Calc(pwd).CopyTo(data, Constants.HashedUserDataSizeInfBytes);
-            BitConverter.TryWriteBytes(data.AsSpan(Constants.HashedUserDataSizeInfBytes+ Constants.HashedUserDataSizeInfBytes), (ushort)userRights);
+            BitConverter.TryWriteBytes(data.AsSpan(Constants.HashedUserDataSizeInfBytes + Constants.HashedUserDataSizeInfBytes), (ushort)userRights);
             Payload = data;
         }
     }

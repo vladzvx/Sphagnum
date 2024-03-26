@@ -5,15 +5,21 @@ using Sphagnum.Common.Contracts.Messaging.Messages;
 namespace Sphagnum.DebugClient.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class TestController : ControllerBase
     {
         private readonly IMessagingClient _connection;
-        private static Task? rec;
+        private static readonly Task? rec;
 
         public TestController(IMessagingClient connection)
         {
             _connection = connection;
+        }
+
+        [HttpGet]
+        public string test()
+        {
+            return "Ok!";
         }
 
 

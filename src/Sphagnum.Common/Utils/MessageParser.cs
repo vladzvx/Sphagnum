@@ -61,7 +61,7 @@ namespace Sphagnum.Common.Utils
         {
             var res = new byte[23];
             res[4] = (byte)messageType;
-            res[0] = (byte)23;
+            res[0] = 23;
             return res;
         }
 
@@ -69,7 +69,7 @@ namespace Sphagnum.Common.Utils
         {
             var res = new byte[23];
             res[4] = (byte)messageType;
-            res[0] = (byte)23;
+            res[0] = 23;
             parentMessageId.TryWriteBytes(res.AsSpan(7));
             return res;
         }
@@ -119,10 +119,24 @@ namespace Sphagnum.Common.Utils
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static Guid GetMessageId(byte[] bytes)
+        {
+            var slice = bytes.AsSpan(7, 16);
+            return new Guid(slice);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static Guid GetMessageId(Span<byte> bytes)
         {
             var slice = bytes.Slice(7, 16);
             return new Guid(slice);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static Guid GetMessageId(ReadOnlyMemory<byte> bytes)
+        {
+            var slice = bytes.Slice(7, 16);
+            return new Guid(slice.Span);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -174,7 +188,7 @@ namespace Sphagnum.Common.Utils
                 if (HasExchange(bytes))//todo проверить бенчмарком, как работает инлайн
                 {
                     shift += bytes[23];
-                    shift +=1;
+                    shift += 1;
                 }
                 if (HasKey(bytes))
                 {

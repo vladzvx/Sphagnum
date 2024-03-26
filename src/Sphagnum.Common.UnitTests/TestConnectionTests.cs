@@ -92,7 +92,7 @@
 //                }
 //                Array.Clear(buffer);
 //            }
-            
+
 //            Assert.IsTrue(data.Length == forResult.Count);
 //        }
 

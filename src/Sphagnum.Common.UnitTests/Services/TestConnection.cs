@@ -1,5 +1,4 @@
 ﻿using Sphagnum.Common.Contracts.Infrastructure;
-using System;
 using System.Threading.Channels;
 
 namespace Sphagnum.Common.UnitTests.Services
@@ -22,7 +21,7 @@ namespace Sphagnum.Common.UnitTests.Services
 
         public void Bind(int port)
         {
-            
+
         }
 
         public void Close()

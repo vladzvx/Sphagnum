@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Sphagnum.Common.Contracts.Infrastructure;
+﻿using Sphagnum.Common.Contracts.Infrastructure;
 using Sphagnum.Common.Services;
 using Sphagnum.Common.Utils;
+using System;
+using System.Threading.Tasks;
 
 namespace Sphagnum.Common.Contracts.Login
 {
@@ -14,25 +14,16 @@ namespace Sphagnum.Common.Contracts.Login
         public string Password { get; set; } = string.Empty;
         public UserRights UserRights { get; set; }
 
-        internal virtual async Task<IConnection> CreateDefaultConnected()
+        internal virtual async Task<IConnection> CreateDefaultConnected(Func<Func<byte[], Task>> messagesProcessorFactory)
         {
-            var conn = new DefaultConnection();
+            var conn = new SocketConnection(messagesProcessorFactory);
             await conn.ConnectAsync(Hostname, Port);
             return conn;
         }
 
-        internal virtual IConnection CreateDefault()
+        internal virtual IConnection CreateDefault(Func<Func<byte[], Task>> messagesProcessorFactoryessor)
         {
-            return new DefaultConnection();
-        }
-        
-        internal byte[] GetAuthPayload()
-        {
-            var data = new byte[Constants.HashedUserDataSizeInfBytes + Constants.HashedUserDataSizeInfBytes + 2];
-            HashCalculator.Calc(Login).CopyTo(data, 0);
-            HashCalculator.Calc(Password).CopyTo(data, Constants.HashedUserDataSizeInfBytes);
-            BitConverter.TryWriteBytes(data.AsSpan(Constants.HashedUserDataSizeInfBytes + Constants.HashedUserDataSizeInfBytes), (ushort)UserRights);
-            return data;
+            return new SocketConnection(messagesProcessorFactoryessor);
         }
     }
 }

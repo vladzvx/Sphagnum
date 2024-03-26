@@ -19,7 +19,7 @@ namespace Sphagnum.Server.DataProcessing.Services
 
         public Func<byte[], Task>? UnregisterCoprocessor(string key)
         {
-            if (_processors.TryRemove(key, out Func<byte[], Task> ? res))
+            if (_processors.TryRemove(key, out Func<byte[], Task>? res))
             {
                 return res;
             }
