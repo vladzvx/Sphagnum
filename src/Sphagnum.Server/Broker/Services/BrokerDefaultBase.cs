@@ -36,6 +36,7 @@ namespace Sphagnum.Server.Broker.Services
             return Task.CompletedTask;
         }
 
+
         public Task StopAsync()
         {
             _cts.Cancel();
