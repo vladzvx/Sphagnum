@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sphagnum.Client\Sphagnum.Client.csproj" />
-    <ProjectReference Include="..\Sphagnum.Server\Sphagnum.Server.csproj" />
+    <ProjectReference Include="..\..\src\Sphagnum.Common\Sphagnum.Common.csproj" />
   </ItemGroup>
 
 </Project>
