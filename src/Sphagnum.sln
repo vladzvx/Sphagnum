@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.Client", "Sphagnum.Client\Sphagnum.Client.csproj", "{0AFD5F86-EAE3-494E-B2E5-77F54EB31653}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{834EE1A0-1D4D-42BD-9F76-F5941DE404C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.Server", "Sphagnum.Server\Sphagnum.Server.csproj", "{2C86F0B0-B592-4F9E-A1E0-96BC453BCB2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.Service", "Sphagnum.Service\Sphagnum.Service.csproj", "{88E2533A-8568-440D-B8A9-05A5372129D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DE8B3036-E476-4A92-92E3-4D0B58FC5137}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.Common", "Sphagnum.Common\Sphagnum.Common.csproj", "{D6EACE65-A4A0-40A9-8896-0BB276471C25}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.Common.UnitTests", "Sphagnum.Common.UnitTests\Sphagnum.Common.UnitTests.csproj", "{AD03A219-5187-446E-BB29-6BE8826EA6C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "debug", "debug", "{84474E24-8329-4E47-B2A7-C9A968B13716}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.DebugClient", "Sphagnum.DebugClient\Sphagnum.DebugClient.csproj", "{91045A44-09DF-4104-BB69-580C639F29B3}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{832DB06C-C0F5-4608-B94F-86FDE003C420}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sphagnum.DebugService", "Sphagnum.DebugService\Sphagnum.DebugService.csproj", "{B6B57A78-D62D-429F-B647-A06B268ECE25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sphagnum.Server.FuncTests", "Sphagnum.Server.FuncTests\Sphagnum.Server.FuncTests.csproj", "{696ED9DF-9F1A-405B-8C4B-AE56031CC349}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AFD5F86-EAE3-494E-B2E5-77F54EB31653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AFD5F86-EAE3-494E-B2E5-77F54EB31653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AFD5F86-EAE3-494E-B2E5-77F54EB31653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AFD5F86-EAE3-494E-B2E5-77F54EB31653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C86F0B0-B592-4F9E-A1E0-96BC453BCB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C86F0B0-B592-4F9E-A1E0-96BC453BCB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C86F0B0-B592-4F9E-A1E0-96BC453BCB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C86F0B0-B592-4F9E-A1E0-96BC453BCB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88E2533A-8568-440D-B8A9-05A5372129D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88E2533A-8568-440D-B8A9-05A5372129D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88E2533A-8568-440D-B8A9-05A5372129D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88E2533A-8568-440D-B8A9-05A5372129D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6EACE65-A4A0-40A9-8896-0BB276471C25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6EACE65-A4A0-40A9-8896-0BB276471C25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6EACE65-A4A0-40A9-8896-0BB276471C25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6EACE65-A4A0-40A9-8896-0BB276471C25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD03A219-5187-446E-BB29-6BE8826EA6C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD03A219-5187-446E-BB29-6BE8826EA6C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD03A219-5187-446E-BB29-6BE8826EA6C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD03A219-5187-446E-BB29-6BE8826EA6C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91045A44-09DF-4104-BB69-580C639F29B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91045A44-09DF-4104-BB69-580C639F29B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91045A44-09DF-4104-BB69-580C639F29B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91045A44-09DF-4104-BB69-580C639F29B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{832DB06C-C0F5-4608-B94F-86FDE003C420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{832DB06C-C0F5-4608-B94F-86FDE003C420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{832DB06C-C0F5-4608-B94F-86FDE003C420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{832DB06C-C0F5-4608-B94F-86FDE003C420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6B57A78-D62D-429F-B647-A06B268ECE25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6B57A78-D62D-429F-B647-A06B268ECE25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6B57A78-D62D-429F-B647-A06B268ECE25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6B57A78-D62D-429F-B647-A06B268ECE25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{696ED9DF-9F1A-405B-8C4B-AE56031CC349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{696ED9DF-9F1A-405B-8C4B-AE56031CC349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{696ED9DF-9F1A-405B-8C4B-AE56031CC349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{696ED9DF-9F1A-405B-8C4B-AE56031CC349}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0AFD5F86-EAE3-494E-B2E5-77F54EB31653} = {834EE1A0-1D4D-42BD-9F76-F5941DE404C2}
+		{2C86F0B0-B592-4F9E-A1E0-96BC453BCB2B} = {834EE1A0-1D4D-42BD-9F76-F5941DE404C2}
+		{88E2533A-8568-440D-B8A9-05A5372129D9} = {834EE1A0-1D4D-42BD-9F76-F5941DE404C2}
+		{D6EACE65-A4A0-40A9-8896-0BB276471C25} = {834EE1A0-1D4D-42BD-9F76-F5941DE404C2}
+		{AD03A219-5187-446E-BB29-6BE8826EA6C1} = {DE8B3036-E476-4A92-92E3-4D0B58FC5137}
+		{91045A44-09DF-4104-BB69-580C639F29B3} = {84474E24-8329-4E47-B2A7-C9A968B13716}
+		{B6B57A78-D62D-429F-B647-A06B268ECE25} = {84474E24-8329-4E47-B2A7-C9A968B13716}
+		{696ED9DF-9F1A-405B-8C4B-AE56031CC349} = {DE8B3036-E476-4A92-92E3-4D0B58FC5137}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AE6D1E4-6CC3-4D93-8498-A7E5ADC24A77}
+	EndGlobalSection
+EndGlobal
