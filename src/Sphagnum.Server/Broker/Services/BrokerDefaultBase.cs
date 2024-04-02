@@ -30,9 +30,9 @@ namespace Sphagnum.Server.Broker.Services
                 var processor = new MessagesProcessor(_authInfoStorage, _messagesStorage, _distributor, _dataProcessor);
                 return processor.ProcessMessage;
             });
-            _connection.Bind(port);
-            _connection.Listen(1000); //todo разобраться что делает этот параметр.
-            _acceptationTask = AcceptationWorker(_cts.Token);
+            _connection?.Bind(port);
+            _connection?.Listen(1000); //todo разобраться что делает этот параметр.
+            //_acceptationTask = AcceptationWorker(_cts.Token);
             return Task.CompletedTask;
         }
 
