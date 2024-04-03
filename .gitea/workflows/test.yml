@@ -1,0 +1,11 @@
+name: checks
+on:
+  - push
+
+jobs:
+  lint:
+    name: check and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: ls
