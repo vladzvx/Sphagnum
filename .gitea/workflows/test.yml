@@ -3,7 +3,8 @@ on:
   - push
 
 jobs:
-  lint:
+  test:
+    labels: [docker]
     name: check and test
     runs-on: ubuntu-latest
     steps:
