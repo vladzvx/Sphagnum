@@ -1,9 +1,12 @@
-name: Gitea Actions Demo
+name: checks
+on:
+  - push
 
-on: [push]
 jobs:
-  Explore-Gitea-Actions:
-    labesl: [docker]
+  test:
     runs-on: ubuntu-latest
+    labels: [docker]
+    name: check and test
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ gitea.event_name }} event."
+      - name: test
+        run: ls
