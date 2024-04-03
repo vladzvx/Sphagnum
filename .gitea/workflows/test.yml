@@ -9,3 +9,4 @@ jobs:
     steps:
       - name: test
         run: ls
+        run: echo "🎉 The job was automatically triggered by a 1111 event."
