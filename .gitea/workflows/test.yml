@@ -1,5 +1,5 @@
 name: Gitea Actions Demo
-run-name: test_runner 🚀
+
 on: [push]
 jobs:
   Explore-Gitea-Actions:
