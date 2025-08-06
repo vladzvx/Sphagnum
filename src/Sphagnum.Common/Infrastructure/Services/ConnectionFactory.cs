@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace Sphagnum.Common.Infrastructure.Services
 {
-    public class ConnectionFactory : IConnectionFactory
+    public class ConnectionFactory
     {
         public int Port { get; set; }
         public string Hostname { get; set; } = string.Empty;
         public string Login { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public UserRights UserRights { get; set; }
-        async Task<IConnection> IConnectionFactory.CreateConnection(bool connected = true)
+        internal virtual async Task<IConnection> CreateConnection(bool connected = true)
         {
             var conn = new SocketConnection(new Socket(SocketType.Stream, ProtocolType.Tcp));
             if (connected)
