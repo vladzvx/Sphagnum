@@ -137,7 +137,7 @@ namespace Sphagnum.Common.Messaging.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static MessageType GetMessageType(Span<byte> bytes)
         {
-            return (MessageType)bytes[4];
+            return bytes.Length < 5 ? MessageType.Unknown : (MessageType)bytes[4];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
