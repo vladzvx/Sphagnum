@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Threading.Channels" Version="8.0.0" />
+    <Folder Include="Old\Utils\Enums\" />
   </ItemGroup>
 
 </Project>

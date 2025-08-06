@@ -1,4 +1,4 @@
-﻿using Sphagnum.Common.Contracts.Login;
+﻿using Sphagnum.Common.Old.Contracts.Login;
 
 namespace Sphagnum.Server.Storage.Users.Contracts
 {

@@ -1,5 +1,5 @@
-﻿using Sphagnum.Common.Contracts.Login;
-using Sphagnum.Common.Utils;
+﻿using Sphagnum.Common.Old.Contracts.Login;
+using Sphagnum.Common.Old.Utils;
 using Sphagnum.Server.Storage.Users.Contracts;
 using System.Numerics;
 

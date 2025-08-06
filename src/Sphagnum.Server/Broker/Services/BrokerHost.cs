@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Sphagnum.Common.Contracts.Login;
+using Sphagnum.Common.Old.Contracts.Login;
 using Sphagnum.Server.Broker.Services;
 
 namespace Sphagnum.Server

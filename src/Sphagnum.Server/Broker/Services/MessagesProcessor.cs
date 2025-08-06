@@ -1,8 +1,8 @@
-﻿using Sphagnum.Common;
-using Sphagnum.Common.Contracts.Login;
-using Sphagnum.Common.Exceptions;
-using Sphagnum.Common.Utils;
-using Sphagnum.Common.Utils.Models;
+﻿using Sphagnum.Common.Messaging.Contracts;
+using Sphagnum.Common.Messaging.Utils;
+using Sphagnum.Common.Old.Contracts;
+using Sphagnum.Common.Old.Contracts.Login;
+using Sphagnum.Common.Old.Exceptions;
 using Sphagnum.Server.Cluster.Contracts;
 using Sphagnum.Server.DataProcessing.Contracts;
 using Sphagnum.Server.Storage.Messages.Contracts;
@@ -49,10 +49,10 @@ namespace Sphagnum.Server.Broker.Services
 
         private async ValueTask<bool> CheckRights(byte[] buffer)
         {
-            var messageType = MessageParser.GetMessageType(buffer);
+            var messageType = MessageParserold.GetMessageType(buffer);
             if (messageType == MessageType.Auth)
             {
-                var payloadStart = MessageParser.GetPayloadStart(buffer);
+                var payloadStart = MessageParserold.GetPayloadStart(buffer);
                 var rights = (UserRights)BitConverter.ToInt16(buffer.AsSpan(Constants.HashedUserDataSizeInfBytes + Constants.HashedUserDataSizeInfBytes + payloadStart, 2));
                 var isRecievingAllowed = await _authInfoStorage.CheckRights(
                     buffer.AsSpan(payloadStart, Constants.HashedUserDataSizeInfBytes),

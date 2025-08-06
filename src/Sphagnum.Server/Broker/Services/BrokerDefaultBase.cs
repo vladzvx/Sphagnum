@@ -1,5 +1,5 @@
-﻿using Sphagnum.Common.Contracts.Login;
-using Sphagnum.Common.Services;
+﻿using Sphagnum.Common.Old.Contracts.Login;
+using Sphagnum.Common.Old.Services;
 using Sphagnum.Server.Cluster.Contracts;
 using Sphagnum.Server.Cluster.Services;
 using Sphagnum.Server.DataProcessing.Contracts;
@@ -13,7 +13,7 @@ namespace Sphagnum.Server.Broker.Services
 {
     internal class BrokerDefaultBase(ConnectionFactory connectionFactory, IMessagesStorage messagesStorage, IDistributor distributor, IDataProcessor dataProcessor)
     {
-        private readonly SphagnumConnection _connection;
+        private readonly SphagnumConnectionOld _connection;
         private readonly CancellationTokenSource _cts = new();
         private Task? _acceptationTask;
 
@@ -25,11 +25,6 @@ namespace Sphagnum.Server.Broker.Services
 
         public Task StartAsync(int port)
         {
-            _connectionFactory.CreateDefault(() =>
-            {
-                var processor = new MessagesProcessor(_authInfoStorage, _messagesStorage, _distributor, _dataProcessor);
-                return processor.ProcessMessage;
-            });
             _connection?.Bind(port);
             _connection?.Listen(1000); //todo разобраться что делает этот параметр.
             //_acceptationTask = AcceptationWorker(_cts.Token);

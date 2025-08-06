@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Sphagnum.Common.Contracts.Messaging;
-using Sphagnum.Common.Contracts.Messaging.Messages;
+using Sphagnum.Common.Messaging.Contracts;
+using Sphagnum.Common.Messaging.Contracts.Messages;
 
 namespace Sphagnum.DebugClient.Controllers
 {

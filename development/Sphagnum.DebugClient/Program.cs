@@ -1,6 +1,6 @@
 using Sphagnum.Client;
-using Sphagnum.Common.Contracts.Login;
-using Sphagnum.Common.Contracts.Messaging;
+using Sphagnum.Common.Messaging.Contracts;
+using Sphagnum.Common.Old.Contracts.Login;
 
 var builder = WebApplication.CreateBuilder(args);
 

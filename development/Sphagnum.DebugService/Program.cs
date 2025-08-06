@@ -1,4 +1,4 @@
-using Sphagnum.Common.Contracts.Login;
+using Sphagnum.Common.Old.Contracts.Login;
 using Sphagnum.Server;
 
 var builder = WebApplication.CreateBuilder(args);
