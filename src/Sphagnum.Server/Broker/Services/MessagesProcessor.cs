@@ -1,13 +1,7 @@
 ﻿using Sphagnum.Common.Infrastructure.Contracts;
-using Sphagnum.Common.Messaging.Contracts.Messages;
-using Sphagnum.Common.Messaging.Utils;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sphagnum.Common.Messaging.Extensions;
+using Sphagnum.Common.Messaging.Utils;
+using System.Collections.Concurrent;
 
 namespace Sphagnum.Server.Broker.Services
 {
@@ -24,7 +18,7 @@ namespace Sphagnum.Server.Broker.Services
         }
 
         internal static async Task ProcessMessages(IConnection connection)
-        { 
+        {
             while (!connection.CancellationTokenSource.IsCancellationRequested)
             {
                 var data = await connection.ReceiveAsync(connection.CancellationTokenSource.Token);

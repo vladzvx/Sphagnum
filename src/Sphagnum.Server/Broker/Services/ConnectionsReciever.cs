@@ -7,6 +7,7 @@ namespace Sphagnum.Server.Broker.Services
 {
     public class ConnectionsReciever : IHostedService
     {
+        private readonly int _port;
         private readonly CancellationTokenSource _cts = new();
         private Task _acceptationTask;
         private readonly IConnection _connection;
@@ -14,10 +15,9 @@ namespace Sphagnum.Server.Broker.Services
         private readonly MessagesProcessor _processor;
         public ConnectionsReciever(ConnectionFactory connectionFactory, ConnectionsManager manager, MessagesProcessor processor)
         {
+            _port = connectionFactory.Port;
             _manager = manager;
             _connection = connectionFactory.CreateConnection(false).Result;
-            _connection.Listen(connectionFactory.Port);
-            _acceptationTask = AcceptationWorker();
             _processor = processor;
         }
 
@@ -41,8 +41,9 @@ namespace Sphagnum.Server.Broker.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _connection.Bind(new IPEndPoint(IPAddress.Any, _port));
             _connection?.Listen(1000); //todo разобраться что делает этот параметр.
-            //_acceptationTask = AcceptationWorker(_cts.Token);
+            _acceptationTask = AcceptationWorker();
             return Task.CompletedTask;
         }
 
