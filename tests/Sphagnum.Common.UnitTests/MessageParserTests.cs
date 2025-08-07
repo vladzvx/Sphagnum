@@ -18,8 +18,11 @@ namespace Sphagnum.Common.UnitTests
                 var bytes2 = MessageParser.PackMessage(message2);
                 var f1 = (MessageFlags)BitConverter.ToUInt16(bytes.AsSpan(5, 2));
                 var f2 = (MessageFlags)BitConverter.ToUInt16(bytes2.AsSpan(5, 2));
-                Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
-
+                Assert.Multiple(() =>
+                {
+                    Assert.That(f1, Is.EqualTo(f2));
+                    Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
+                });
                 count++;
             }
         }
@@ -36,9 +39,11 @@ namespace Sphagnum.Common.UnitTests
                 var bytes2 = MessageParser.PackMessage(message2);
                 var f1 = (MessageFlags)BitConverter.ToUInt16(bytes.AsSpan(5, 2));
                 var f2 = (MessageFlags)BitConverter.ToUInt16(bytes2.AsSpan(5, 2));
-                Assert.IsTrue(f1 == f2);
-                Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
-
+                Assert.Multiple(() =>
+                {
+                    Assert.That(f1, Is.EqualTo(f2));
+                    Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
+                });
                 count++;
             }
         }
@@ -56,8 +61,11 @@ namespace Sphagnum.Common.UnitTests
                 var bytes2 = MessageParser.PackMessage(message2);
                 var f1 = (MessageFlags)BitConverter.ToUInt16(bytes.AsSpan(5, 2));
                 var f2 = (MessageFlags)BitConverter.ToUInt16(bytes2.AsSpan(5, 2));
-                Assert.IsTrue(f1 == f2);
-                Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(f1, Is.EqualTo(f2));
+                    Assert.That(Comparers.MessagesComparer.Compare(message, message2), Is.True);
+                });
                 count++;
             }
         }

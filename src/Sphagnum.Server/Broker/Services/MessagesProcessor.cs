@@ -14,7 +14,7 @@ namespace Sphagnum.Server.Broker.Services
             {
                 Connections.TryRemove(id, out var conn);
             };
-            ProcessMessages(connection);
+            var _ = ProcessMessages(connection);
         }
 
         internal static async Task ProcessMessages(IConnection connection)

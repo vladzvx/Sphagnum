@@ -9,7 +9,6 @@ namespace Sphagnum.DebugClient.Controllers
     public class TestController : ControllerBase
     {
         private readonly ClientDefault _connection;
-        private static readonly Task? rec;
 
         public TestController(ClientDefault connection)
         {
@@ -17,7 +16,7 @@ namespace Sphagnum.DebugClient.Controllers
         }
 
         [HttpGet]
-        public string test()
+        public string Test()
         {
             return "Ok!";
         }

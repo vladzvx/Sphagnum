@@ -9,7 +9,6 @@ namespace Sphagnum.Server.Broker.Services
     {
         private readonly int _port;
         private readonly CancellationTokenSource _cts = new();
-        private Task _acceptationTask;
         private readonly IConnection _connection;
         private readonly ConnectionsManager _manager;
         private readonly MessagesProcessor _processor;
@@ -43,7 +42,7 @@ namespace Sphagnum.Server.Broker.Services
         {
             _connection.Bind(new IPEndPoint(IPAddress.Any, _port));
             _connection?.Listen(1000); //todo разобраться что делает этот параметр.
-            _acceptationTask = AcceptationWorker();
+            var _ = AcceptationWorker();
             return Task.CompletedTask;
         }
 

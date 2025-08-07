@@ -28,6 +28,6 @@ namespace Sphagnum.Common.Infrastructure.Contracts
         void Close();
         bool Connected { get; }
 
-        public event Action<Guid> ConnectionClosed;
+        public event Action<Guid>? ConnectionClosed;
     }
 }

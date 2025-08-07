@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Sphagnum.Common.Messaging.Extensions
 {
-    internal static class IConntcrionExtensions
+    internal static class IConnectionExtensions
     {
         public static async ValueTask<byte[]> ReceiveAsync(this IConnection connection, CancellationToken cancellationToken = default)
         {
-            var lengthBuffer = new byte[4];
+            var lengthBuffer = new byte[5];
             await connection.ReceiveAsync(lengthBuffer, SocketFlags.Peek, cancellationToken);
             var length = BitConverter.ToInt32(lengthBuffer, 0);
             var result = new byte[length];
