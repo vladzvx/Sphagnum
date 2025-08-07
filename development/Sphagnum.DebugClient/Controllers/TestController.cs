@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Sphagnum.Client;
 using Sphagnum.Common.Messaging.Contracts;
 using Sphagnum.Common.Messaging.Contracts.Messages;
 
@@ -8,10 +9,10 @@ namespace Sphagnum.DebugClient.Controllers
     [Route("[controller]/[action]")]
     public class TestController : ControllerBase
     {
-        private readonly IMessagingClient _connection;
+        private readonly ClientDefault _connection;
         private static readonly Task? rec;
 
-        public TestController(IMessagingClient connection)
+        public TestController(ClientDefault connection)
         {
             _connection = connection;
         }
@@ -34,9 +35,9 @@ namespace Sphagnum.DebugClient.Controllers
                 payload1[i] = 1;
                 payload2[i] = 2;
             }
-            var t1 = _connection.Publish(new OutgoingMessage("test", payload1)).AsTask();
-            var t2 = _connection.Publish(new OutgoingMessage("test", payload2)).AsTask();
-            await Task.WhenAll(t1, t2);
+            var t1 = _connection.Publish(new Common.Messaging.Contracts.Messages.Message("test", RoutingKey.Empty, payload1)).AsTask();
+            //var t2 = _connection.Publish(new Message("test", RoutingKey.Empty, payload2)).AsTask();
+            await Task.WhenAll(t1);
         }
     }
 }

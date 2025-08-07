@@ -9,14 +9,18 @@ namespace Sphagnum.Common.Infrastructure.Services
 {
     internal class SocketConnection : IConnection
     {
+        public Guid ConnectionId { get; private set; } = Guid.NewGuid();
+        public bool Connected => _socket.Connected;
+        public CancellationTokenSource CancellationTokenSource { get; private set; } = new CancellationTokenSource();
+
+        public event Action<Guid>? ConnectionClosed;
+
         private readonly Socket _socket;
 
         public SocketConnection(Socket socket)
         {
             _socket = socket;
         }
-
-        public bool Connected => _socket.Connected;
 
         public async Task<IConnection> AcceptAsync()
         {
@@ -31,6 +35,7 @@ namespace Sphagnum.Common.Infrastructure.Services
 
         public void Close()
         {
+            ConnectionClosed?.Invoke(ConnectionId);
             _socket.Close();
         }
 
@@ -41,6 +46,7 @@ namespace Sphagnum.Common.Infrastructure.Services
 
         public void Dispose()
         {
+            ConnectionClosed?.Invoke(ConnectionId);
             _socket.Dispose();
         }
 

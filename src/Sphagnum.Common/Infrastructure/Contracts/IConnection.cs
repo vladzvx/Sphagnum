@@ -11,6 +11,8 @@ namespace Sphagnum.Common.Infrastructure.Contracts
     /// </summary>
     internal interface IConnection : IDisposable
     {
+        public CancellationTokenSource CancellationTokenSource { get; }
+        public Guid ConnectionId { get; }
         Task ConnectAsync(string host, int port);
         Task<IConnection> AcceptAsync();
         //todo прописать бросаемые исключения
@@ -25,5 +27,7 @@ namespace Sphagnum.Common.Infrastructure.Contracts
         //todo прописать бросаемые исключения
         void Close();
         bool Connected { get; }
+
+        public event Action<Guid> ConnectionClosed;
     }
 }

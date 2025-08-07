@@ -1,5 +1,4 @@
 ﻿using Sphagnum.Common.Infrastructure.Contracts;
-using Sphagnum.Common.Old.Contracts.Login;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace Sphagnum.Common.Infrastructure.Services
         public string Hostname { get; set; } = string.Empty;
         public string Login { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public UserRights UserRights { get; set; }
+
         internal virtual async Task<IConnection> CreateConnection(bool connected = true)
         {
             var conn = new SocketConnection(new Socket(SocketType.Stream, ProtocolType.Tcp));

@@ -1,6 +1,5 @@
 using Sphagnum.Client;
-using Sphagnum.Common.Messaging.Contracts;
-using Sphagnum.Common.Old.Contracts.Login;
+using Sphagnum.Common.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,13 +8,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(new ConnectionFactory()
 {
-    UserRights = UserRights.All,
+    //UserRights = UserRights.All,
     Login = "root",
     Password = "root",
     Hostname = "test_server",
     Port = 8081,
 });
-builder.Services.AddSingleton<IMessagingClient, ClientDefault>();
+builder.Services.AddSingleton<ClientDefault>();
 var app = builder.Build();
 
 app.UseSwagger();

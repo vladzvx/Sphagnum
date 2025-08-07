@@ -19,6 +19,7 @@ namespace Sphagnum.Client
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
         public ClientDefault(ConnectionFactory factory)
         {
+            Task.Delay(10000).Wait();
             _connection = factory.CreateConnection().Result;
             _recievingTask = RecivingTask();
         }
@@ -47,9 +48,9 @@ namespace Sphagnum.Client
         //    throw new Exception("Auth failed!");
         //}
 
-        public ValueTask Ack(Guid messageId)
+        public async ValueTask Ack(Guid messageId)
         {
-            throw new NotImplementedException();
+            await Task.Delay(1000);
         }
 
         public ValueTask Nack(Guid messageId)
@@ -59,9 +60,9 @@ namespace Sphagnum.Client
 
         public async ValueTask<Guid> Publish(Message message)
         {
-            var bytes = MessageParserold.PackMessage(message);
+            var bytes = MessageParser.PackMessage(message);
             await _connection.SendAsync(bytes.AsMemory(), System.Net.Sockets.SocketFlags.None);
-            return MessageParserold.GetMessageId(bytes);
+            return MessageParser.GetMessageId(bytes);
         }
 
         public async ValueTask<Message> Consume(CancellationToken cancellationToken)
