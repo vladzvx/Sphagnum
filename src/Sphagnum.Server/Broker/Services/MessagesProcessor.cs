@@ -1,13 +1,20 @@
 ﻿using Sphagnum.Common.Infrastructure.Contracts;
-using Sphagnum.Common.Messaging.Extensions;
-using Sphagnum.Common.Messaging.Utils;
+using Sphagnum.Common.Infrastructure.Extensions;
+using Sphagnum.Server.Storage.Contracts.Wal.Interfaces;
 using System.Collections.Concurrent;
 
 namespace Sphagnum.Server.Broker.Services
 {
     public class MessagesProcessor
     {
+        private readonly IWalWriter _walWriter;
         private readonly ConcurrentDictionary<Guid, IConnection> Connections = new();
+
+        public MessagesProcessor(IWalWriter walWriter)
+        {
+            _walWriter = walWriter;
+        }
+
         internal void AddConnection(IConnection connection)
         {
             connection.ConnectionClosed += (id) =>
@@ -17,12 +24,12 @@ namespace Sphagnum.Server.Broker.Services
             var _ = ProcessMessages(connection);
         }
 
-        internal static async Task ProcessMessages(IConnection connection)
+        internal async Task ProcessMessages(IConnection connection)
         {
             while (!connection.CancellationTokenSource.IsCancellationRequested)
             {
                 var data = await connection.ReceiveAsync(connection.CancellationTokenSource.Token);
-                var mess = MessageParser.UnpackMessage(data);
+                await _walWriter.WriteData(data);
             }
         }
     }

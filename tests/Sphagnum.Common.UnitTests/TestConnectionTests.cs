@@ -1,9 +1,9 @@
 using AutoFixture;
-using Sphagnum.Common.Messaging.Extensions;
-using Sphagnum.Server.Tests.Services;
+using Sphagnum.Common.Infrastructure.Extensions;
+using Sphagnum.Common.UnitTests.Services;
 using System.Security.Cryptography;
 
-namespace Sphagnum.Server.Tests
+namespace Sphagnum.Common.UnitTests
 {
     public class TestConnectionTests
     {
@@ -12,10 +12,11 @@ namespace Sphagnum.Server.Tests
         public async Task IsNewConnectionCretesCorrect()
         {
             var connection = new TestConnection();
+            var connection2 = new TestConnection();
             var connectionTask = connection.AcceptAsync();
-            var id = Guid.NewGuid();
-            await Task.WhenAll(connection.AddInputConnection(id), connectionTask);
-            Assert.That(id, Is.EqualTo(connectionTask.Result.ConnectionId));
+
+            await Task.WhenAll(connection.AddInputConnection(connection2), connectionTask);
+            Assert.That(connection2.ConnectionId, Is.EqualTo(connectionTask.Result.ConnectionId));
         }
 
         /// <summary>

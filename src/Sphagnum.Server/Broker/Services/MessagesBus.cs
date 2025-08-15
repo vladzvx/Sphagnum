@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sphagnum.Server.Broker.Services
 {
-    public class ConnectionsManager
+    internal class MessagesBus
     {
     }
 }

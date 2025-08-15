@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
 
-namespace Sphagnum.Server.Tests.Services
+namespace Sphagnum.Common.UnitTests.Services
 {
     /// <summary>
     /// Класс имитирующий передачу данных через сокет.
@@ -101,9 +101,9 @@ namespace Sphagnum.Server.Tests.Services
             return await _newConnectionsChannel.Reader.ReadAsync();
         }
 
-        internal async Task AddInputConnection(Guid? connectionId = null)
+        internal async Task AddInputConnection(TestConnection connection)
         {
-            await _newConnectionsChannel.Writer.WriteAsync(connectionId.HasValue ? new TestConnection(connectionId.Value) : new TestConnection());
+            await _newConnectionsChannel.Writer.WriteAsync(connection);
         }
     }
 }

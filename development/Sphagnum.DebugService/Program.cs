@@ -9,7 +9,6 @@ builder.Services.AddSingleton(new ConnectionFactory()
 });
 builder.Services.AddSingleton<MessagesProcessor>();
 builder.Services.AddSingleton<ConnectionsManager>();
-builder.Services.AddSingleton<ConnectionsManager>();
 builder.Services.AddHostedService<ConnectionsReciever>();
 
 

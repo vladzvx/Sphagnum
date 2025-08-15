@@ -1,8 +1,8 @@
 ﻿using Sphagnum.Common.Infrastructure.Contracts;
+using Sphagnum.Common.Infrastructure.Extensions;
 using Sphagnum.Common.Infrastructure.Services;
 using Sphagnum.Common.Messaging.Contracts;
 using Sphagnum.Common.Messaging.Contracts.Messages;
-using Sphagnum.Common.Messaging.Extensions;
 using Sphagnum.Common.Messaging.Utils;
 using System;
 using System.Threading;
@@ -35,18 +35,6 @@ namespace Sphagnum.Client
                 }
             }
         }
-
-        //private async Task Auth()
-        //{
-        //    await _connection.SendAsync(MessageParser.PackMessage(new AuthMessage(_connectionFactory.Login, _connectionFactory.Password, _connectionFactory.UserRights)));
-        //    var response = await ReceiveAsync();
-        //    var messageType = MessageParser.GetMessageType(response);
-        //    if (messageType == MessageType.AuthSuccessfull)
-        //    {
-        //        return;
-        //    }
-        //    throw new Exception("Auth failed!");
-        //}
 
         public async ValueTask Ack(Guid messageId)
         {

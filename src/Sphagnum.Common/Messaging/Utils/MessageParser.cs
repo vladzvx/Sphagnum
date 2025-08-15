@@ -32,6 +32,7 @@ namespace Sphagnum.Common.Messaging.Utils
             var id = GetMessageId(bytes);
             return new Message(id, exchangeName, routingKey, payload);
         }
+
         public static byte[] PackMessage(Message message)
         {
             if (string.IsNullOrEmpty(message.Exchange) || string.IsNullOrWhiteSpace(message.Exchange))
